@@ -3,13 +3,13 @@ import PixeEClock from "./pixeeClock.js";
 // @desc Enumerations specifying the various 'levels' of logging supported by PixeE.
 export const PixeELogLevel = Object.freeze({
     // Intended for very detailed, often unnecessary messages.
-    VERBOSE: "VERBOSE",
+    VERBOSE: 0,
     // Intended for generally helpful information.
-    INFO: "INFO",
+    INFO: 1,
     // Intended for items that may be an issue, but aren't likely to cause a crash.
-    WARNING: "WARNING",
+    WARNING: 2,
     // Intended for show-stopping issues that need to be addressed.
-    ERROR: "ERROR"
+    ERROR: 3
 });
 
 // @desc Logging class to assist with console debugging.
@@ -76,11 +76,27 @@ export class PixeELogger {
      * @returns {void}
      */
     log(source, message, logLevel) {
-        if (!this.debug) return;
+        if (!this.debug ||
+            this.logLevel > logLevel) {
+            return;
+        }
 
-        
+        let logLevelString = "";
+        switch (logLevel) {
+            case PixeELogLevel.ERROR:
+                logLevelString = "ERROR";
+                break;
+            case PixeELogLevel.INFO:
+                logLevelString = "INFO";
+                break;
+            case PixeELogLevel.VERBOSE:
+                logLevelString = "VERBOSE";
+                break;
+            case PixeELogLevel.WARNING:
+                logLevelString = "WARNING";
+                break;
+        }
 
-        const type = PixeELogLevel[logLevel];
         let timestamp = this.clock.getElapsedTime();
 
         let finalMessage = "";
@@ -89,9 +105,9 @@ export class PixeELogger {
         }
 
         if (this.singleLine) {
-            finalMessage += `[${type}] ${source}: ${message}`;
+            finalMessage += `[${logLevelString}] ${source}: ${message}`;
         } else {
-            finalMessage += `[${type}]\n${source}:\n${message}`;
+            finalMessage += `[${logLevelString}]\n${source}:\n${message}`;
         }
 
         console.log(finalMessage);
