@@ -12,9 +12,11 @@ export const PixeELogLevel = Object.freeze({
 
 // @desc Logging class to assist with console debugging.
 export class PixeELogger {
-    constructor(debug = true, defaultLogLevel = PixeELogLevel.INFO) {
+    constructor(debug = true, singleLine = true, defaultLogLevel = PixeELogLevel.INFO) {
         // This value decides whether or not messages get logged to console.
         this.debug = debug;
+        // This value decides whether or not messages get logged in a single line, or split for readability.
+        this.singleLine = singleLine;
 
         /* This value decides the types of messages you will see display
          * in the console.
@@ -28,9 +30,18 @@ export class PixeELogger {
 
     /* @desc Allows the enabling/disabled of the debug variable.
      * @param (boolean) true to enable.
+     * @returns (void)
      */
     enableDebug(debug) {
         this.debug = debug;
+    }
+
+    /* @desc Allows the enabling/disabling of single-line logging.
+     * @param (boolean) true to enable.
+     * @returns (void)
+    */
+    enableSingleLine(singleLine) {
+        this.singleLine = singleLine;
     }
 
     /* @desc Used to log ERROR messages.
@@ -61,7 +72,13 @@ export class PixeELogger {
         if (!this.debug) return;
 
         const type = PixeELogLevel[logLevel];
-        const finalMessage = `[${type}]\n${source}:\n${message}`;
+        let finalMessage = "";
+        if (this.singleLine) {
+            finalMessage = `[${type}] - ${source}: ${message}`;
+        } else {
+            finalMessage = `[${type}]\n${source}:\n${message}`;
+        }
+
         console.log(finalMessage);
     };
 
