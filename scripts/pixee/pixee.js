@@ -1,18 +1,22 @@
+import PixeEClock from "./pixeeClock.js";
 import { PixeELogLevel, PixeELogger } from "./pixeeLogger.js";
 
 // @desc The base context for the PixeE engine.
 class PixeE {
     constructor(
         debug = true,
+        timestamp = true,
         singleLine = true,
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.0.7";
+        this.version = "a0.0.8";
         this.fullName = `${this.name} - ${this.version}`;
 
+        this.clock = new PixeEClock();
+
         // Reference to the primary logger.
-        this.logger = new PixeELogger(debug, singleLine, defaultLogLevel);
+        this.logger = new PixeELogger(this.clock, debug, timestamp, singleLine, defaultLogLevel);
         this.logger.info(this.name, this.fullName);
     }
 

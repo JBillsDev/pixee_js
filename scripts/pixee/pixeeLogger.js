@@ -1,3 +1,5 @@
+import PixeEClock from "./pixeeClock.js";
+
 // @desc Enumerations specifying the various 'levels' of logging supported by PixeE.
 export const PixeELogLevel = Object.freeze({
     // Intended for very detailed, often unnecessary messages.
@@ -12,11 +14,16 @@ export const PixeELogLevel = Object.freeze({
 
 // @desc Logging class to assist with console debugging.
 export class PixeELogger {
-    constructor(debug = true, singleLine = true, defaultLogLevel = PixeELogLevel.INFO) {
+    constructor(clock, debug = true, timestamp = true, singleLine = true, defaultLogLevel = PixeELogLevel.INFO) {
+        // Reference to the core PixeEClock
+        this.clock = clock;
+
         // This value decides whether or not messages get logged to console.
         this.debug = debug;
         // This value decides whether or not messages get logged in a single line, or split for readability.
         this.singleLine = singleLine;
+        // This value decides whether or not a timestamp gets added to each log message.
+        this.timestamp = timestamp;
 
         /* This value decides the types of messages you will see display
          * in the console.
@@ -72,11 +79,17 @@ export class PixeELogger {
         if (!this.debug) return;
 
         const type = PixeELogLevel[logLevel];
+        let timestamp = this.clock.getElapsedTime();
+
         let finalMessage = "";
+        if (this.timestamp) {
+            finalMessage = this.clock.getElapsedTime();
+        }
+
         if (this.singleLine) {
-            finalMessage = `[${type}] - ${source}: ${message}`;
+            finalMessage += `[${type}] - ${source}: ${message}`;
         } else {
-            finalMessage = `[${type}]\n${source}:\n${message}`;
+            finalMessage += `[${type}]\n${source}:\n${message}`;
         }
 
         console.log(finalMessage);
