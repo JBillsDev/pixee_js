@@ -23,6 +23,42 @@ export class PixeELogger {
         this.setLogLevel(defaultLogLevel);
     };
 
+    /* @desc Used to log ERROR messages.
+     * @param {string} 'Name' or identifier of the caller.
+     * @param {string} The desired message.
+     * @returns {void}
+     */
+    error(source, message) {
+        this.log(source, message, PixeELogLevel.ERROR);
+    };
+
+    /* @desc Used to log INFO messages.
+     * @param {string} 'Name' or identifier of the caller.
+     * @param {string} The desired message.
+     * @returns {void}
+     */
+    info(source, message) {
+        this.log(source, message, PixeELogLevel.INFO);
+    };
+
+    /* @desc Used to log VERBOSE messages.
+     * @param {string} 'Name' or identifier of the caller.
+     * @param {string} The desired message.
+     * @returns {void}
+     */
+    verbose(source, message) {
+        this.log(source, message, PixeELogLevel.VERBOSE);
+    };
+
+    /* @desc Used to log WARNING messages.
+     * @param {string} 'Name' or identifier of the caller.
+     * @param {string} The desired message.
+     * @returns {void}
+     */
+    warning(source, message) {
+        this.log(source, message, PixeELogLevel.WARNING);
+    };
+
     /* @desc The lowest-level logging method.
      * @param {string} 'Name' or identifier of the caller.
      * @param {string} The desired message.

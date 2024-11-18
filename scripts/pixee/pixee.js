@@ -4,12 +4,12 @@ import { PixeELogLevel, PixeELogger } from "./pixeeLogger.js";
 class PixeE {
     constructor(defaultLogLevel = PixeELogLevel.INFO) {
         this.name = "PixeE";
-        this.version = "a0.0.4";
+        this.version = "a0.0.5";
         this.fullName = `${this.name} - ${this.version}`;
 
         // Reference to the primary logger.
         this.logger = new PixeELogger(defaultLogLevel);
-        this.logger.log(this.name, this.fullName, PixeELogLevel.INFO);
+        this.logger.info(this.name, this.fullName);
     }
 
     /* @desc Returns a reference to the primary logger instance.
