@@ -78,16 +78,18 @@ export class PixeELogger {
     log(source, message, logLevel) {
         if (!this.debug) return;
 
+        
+
         const type = PixeELogLevel[logLevel];
         let timestamp = this.clock.getElapsedTime();
 
         let finalMessage = "";
         if (this.timestamp) {
-            finalMessage = this.clock.getElapsedTime();
+            finalMessage = this.clock.getElapsedTimeFormatted() + ", ";
         }
 
         if (this.singleLine) {
-            finalMessage += `[${type}] - ${source}: ${message}`;
+            finalMessage += `[${type}] ${source}: ${message}`;
         } else {
             finalMessage += `[${type}]\n${source}:\n${message}`;
         }
