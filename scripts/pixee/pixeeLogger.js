@@ -12,7 +12,10 @@ export const PixeELogLevel = Object.freeze({
 
 // @desc Logging class to assist with console debugging.
 export class PixeELogger {
-    constructor(defaultLogLevel = PixeELogLevel.INFO) {
+    constructor(debug = true, defaultLogLevel = PixeELogLevel.INFO) {
+        // This value decides whether or not messages get logged to console.
+        this.debug = debug;
+
         /* This value decides the types of messages you will see display
          * in the console.
          * Set it via 'setLogLevel' to enforce consistency and
@@ -22,6 +25,13 @@ export class PixeELogger {
         this.logLevel = null;
         this.setLogLevel(defaultLogLevel);
     };
+
+    /* @desc Allows the enabling/disabled of the debug variable.
+     * @param (boolean) true to enable.
+     */
+    enableDebug(debug) {
+        this.debug = debug;
+    }
 
     /* @desc Used to log ERROR messages.
      * @param {string} 'Name' or identifier of the caller.
@@ -41,6 +51,20 @@ export class PixeELogger {
         this.log(source, message, PixeELogLevel.INFO);
     };
 
+    /* @desc The lowest-level logging method.
+     * @param {string} 'Name' or identifier of the caller.
+     * @param {string} The desired message.
+     * @param {PixeELogLevel} The intended PixeELogLevel logLevel.
+     * @returns {void}
+     */
+    log(source, message, logLevel) {
+        if (!this.debug) return;
+
+        const type = PixeELogLevel[logLevel];
+        const finalMessage = `[${type}]\n${source}:\n${message}`;
+        console.log(finalMessage);
+    };
+
     /* @desc Used to log VERBOSE messages.
      * @param {string} 'Name' or identifier of the caller.
      * @param {string} The desired message.
@@ -57,18 +81,6 @@ export class PixeELogger {
      */
     warning(source, message) {
         this.log(source, message, PixeELogLevel.WARNING);
-    };
-
-    /* @desc The lowest-level logging method.
-     * @param {string} 'Name' or identifier of the caller.
-     * @param {string} The desired message.
-     * @param {PixeELogLevel} The intended PixeELogLevel logLevel.
-     * @returns {void}
-     */
-    log(source, message, logLevel) {
-        const type = PixeELogLevel[logLevel];
-        const finalMessage = `[${type}]\n${source}:\n${message}`;
-        console.log(finalMessage);
     };
 
     /* @desc Set the 'log level' of the logger.
