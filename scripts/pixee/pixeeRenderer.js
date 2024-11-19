@@ -1,10 +1,12 @@
 // @desc Renderer class that stores the Context2D.
 class PixeERenderer {
-    /* @desc Constructs the renderer, which contains the Context2D.
-     * @param (string) The html id of the canvas element.
-     * @param (integer) The desired width of the canvas.
-     * @param (integer) The desired height of the canvas.
-     * @param (color) The clear color to be used when clearing the screen.
+    /**
+     * @param canvasID The html id of the canvas element.
+     * @param desiredWidth The desired width of the canvas.
+     * @param desiredHeight The desired height of the canvas.
+     * @param clearColor The clear color to be used when clearing the screen.
+     * @param logger A reference to the PixeE context's PixeELogger instance.
+     * @returns void
      */
     constructor(canvasID, desiredWidth, desiredHeight, clearColor, logger) {
         this.arcBeginAngle = 0;
