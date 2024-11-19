@@ -1,3 +1,5 @@
+import Image2D from "./image2D.js";
+
 // @desc Renderer class that stores the Context2D.
 class PixeERenderer {
     /**
@@ -36,21 +38,27 @@ class PixeERenderer {
         if (!this.ctx) {
             this.logger.error("PixeERenderer", "Could not get context from canvas with ID: " + canvasID);
         }
+
+        this.rootImagePath = '';
+        this.imageExt = '.png';
+        this.imageMap = {};
     }
 
-    /* @desc Clear the canvas to PixiERenderer's current clearColor.
-     * @returns (void)
+    /**
+     * @desc Clear the canvas to PixiERenderer's current clearColor.
+     * @returns void
      */
     clearScreen() {
         this.ctx.fillStyle = this.clearColor;
         this.ctx.fillRect(0, 0, this.viewportWidth, this.viewportHeight);
     }
 
-    /* @desc Draws a circle at (x, y) of (radius) radius.
-     * @param (number) X position of circle.
-     * @param (number) Y position of circle.
-     * @param (number) Radius of circle.
-     * @returns (void)
+    /**
+     * @desc Draws a circle at (x, y) of (radius) radius.
+     * @param xPos X position of circle.
+     * @param yPos Y position of circle.
+     * @param radius Radius of circle.
+     * @returns void
      */
     drawCircle(xPos, yPos, radius) {
         this.ctx.beginPath();
@@ -59,39 +67,95 @@ class PixeERenderer {
         this.ctx.closePath();
     }
 
-    /* @desc Draws a rectangle at (x, y) of (width, height) dimensions.
-     * @param (number) X position of rectangle.
-     * @param (number) Y position of rectangle.
-     * @param (number) Width of rectangle.
-     * @param (number) Height of rectangle.
-     * @returns (void)
+    /**
+     * @desc Draw an image from the renderer's imageMap.
+     * @param xPos The x-position to draw the image.
+     * @param yPos The y-position to draw the image.
+     * @param imageName The name of the image to draw from the imageMap.
+     * @returns void
+     */
+    drawImage(xPos, yPos, imageName) {
+        this.ctx.drawImage(this.imageMap[imageName].img, xPos, yPos);
+    }
+
+
+    /**
+     * @desc Draw a clipped image from the renderer's imageMap.
+     * @param xPos The x-position to draw the image.
+     * @param yPos The y-position to draw the image.
+     * @param imageName The name of the image to draw from the imageMap.
+     * @param clipX The clip's x-position within the image.
+     * @param clipY The clip's y-position within the image.
+     * @returns void
+     */
+    drawImageClip(xPos, yPos, imageName, clipX, clipY) {
+        const image = this.imageMap[imageName];
+        const clipPosX = clipX * image.clipWidth;
+        const clipPosY = clipY * image.clipHeight;
+
+        this.ctx.drawImage(image.img,
+            clipPosX, clipPosY, image.clipWidth, image.clipHeight,
+            xPos, yPos, image.clipWidth, image.clipHeight
+        );
+    }
+
+    /**
+     * @desc Draws a rectangle at (x, y) of (width, height) dimensions.
+     * @param xPos X position of rectangle.
+     * @param yPos Y position of rectangle.
+     * @param width Width of rectangle.
+     * @param height Height of rectangle.
+     * @returns void
      */
     drawRect(xPos, yPos, width, height) {
         this.ctx.fillRect(xPos, yPos, width, height);
     }
 
-    /* @desc Set the color to be used by subsequent draw calls.
-     * The color value should be a CSS-allowed color value, i.e.:
+    /**
+     * @desc Loads an image into a stored map of images.
+     * @param imageName The name of the image, without path or extension.
+     * @param relativeImagePath The path, from the rootImagePath, to the image.
+     * @param clipsX The number of horizontal clips.
+     * @param clipsY The number of vertical clips.
+     * @returns void
+     */
+    loadImageToMap(imageName, clipsX, clipsY, relativeImagePath = '') {
+        const filePath = this.rootImagePath + relativeImagePath + imageName + this.imageExt;
+        this.imageMap[imageName] = new Image2D(imageName, filePath, clipsX, clipsY);
+    }
+
+    /**
+     * @desc Set the color to be used by subsequent draw calls.
+     * @param color A string value containing a color.
+     * @returns void
+     * Note: The color value should be a CSS-allowed color value, i.e.:
      * 'rgb(255, 55, 0)', '#eee', 'hsl(50, 80%, 30%)', 'aqua'.
-     * @param (color) A string value containing a color.
-     * @returns (void)
      */
     setRenderColor(color) {
         this.ctx.fillStyle = color;
     }
 
-    /* @desc Sets the color and alpha draw color to be used by subsequent draw calls.
+    /**
+     * @desc Sets the color and alpha draw color to be used by subsequent draw calls.
      * The color values used can be integers (0 - 255) or percentages (0 - 100%).
      * The alpha value can be a float (0 - 1.0) or percentage (0 - 100%).
-     * @param (number) The red value.
-     * @param (number) The green value.
-     * @param (number) The blue value.
-     * @param (number) The alpha value.
-     * @returns (void)
+     * @param red The red value.
+     * @param green The green value.
+     * @param blue The blue value.
+     * @param alpha The alpha value.
+     * @returns void
      */
     setRenderColorRgba(red, green, blue, alpha = 1.0) {
         console.log(`${red} ${green} ${blue}`);
         this.ctx.fillStyle = `rgb(${red} ${green} ${blue} / ${alpha})`;
+    }
+
+    /**
+     * @desc Sets the root path where images are stored.
+     * @param rootImagePath The relative, root folder used for images.
+     */
+    setRootImagePath(rootImagePath = '') {
+        this.rootImagePath = rootImagePath;
     }
 }
 

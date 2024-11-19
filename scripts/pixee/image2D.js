@@ -4,9 +4,9 @@
 class Image2D {
     /**
      * @param name - Name of the image, used in the filepath, but without extension.
-     * @param filePath - The relative path to the image.
-     * @param clipsX - The number of horizontal clips.
-     * @param clipsY - The number of vertical clips.
+     * @param filePath The relative path to the image.
+     * @param clipsX The number of horizontal clips.
+     * @param clipsY The number of vertical clips.
      */
     constructor(name, filePath, clipsX = 1, clipsY = 1) {
         this.name = name;
