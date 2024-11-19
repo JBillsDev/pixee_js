@@ -7,6 +7,9 @@ class PixeERenderer {
      * @param (color) The clear color to be used when clearing the screen.
      */
     constructor(canvasID, desiredWidth, desiredHeight, clearColor, logger) {
+        this.arcBeginAngle = 0;
+        this.arcEndAngle = Math.PI * 2;
+
         this.viewportWidth = desiredWidth;
         this.viewportHeight = desiredHeight;
         this.clearColor = clearColor;
@@ -41,12 +44,25 @@ class PixeERenderer {
         this.ctx.fillRect(0, 0, this.viewportWidth, this.viewportHeight);
     }
 
+    /* @desc Draws a circle at (x, y) of (radius) radius.
+     * @param (number) X position of circle.
+     * @param (number) Y position of circle.
+     * @param (number) Radius of circle.
+     * @returns (void)
+     */
+    drawCircle(xPos, yPos, radius) {
+        this.ctx.beginPath();
+        this.ctx.arc(xPos, yPos, radius, this.arcBeginAngle, this.arcEndAngle, false);
+        this.ctx.fill();
+        this.ctx.closePath();
+    }
+
     /* @desc Draws a rectangle at (x, y) of (width, height) dimensions.
      * @param (number) X position of rectangle.
      * @param (number) Y position of rectangle.
      * @param (number) Width of rectangle.
      * @param (number) Height of rectangle.
-     * @ returns (void)
+     * @returns (void)
      */
     drawRect(xPos, yPos, width, height) {
         this.ctx.fillRect(xPos, yPos, width, height);
