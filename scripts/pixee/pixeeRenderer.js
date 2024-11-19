@@ -13,6 +13,7 @@ class PixeERenderer {
     constructor(canvasID, desiredWidth, desiredHeight, clearColor, logger) {
         this.arcBeginAngle = 0;
         this.arcEndAngle = Math.PI * 2;
+        this.radianConversion = Math.PI / 180;
 
         this.viewportWidth = desiredWidth;
         this.viewportHeight = desiredHeight;
@@ -78,6 +79,26 @@ class PixeERenderer {
         this.ctx.drawImage(this.imageMap[imageName].img, xPos, yPos);
     }
 
+    /**
+     * @desc Draw an image from the renderer's imageMap, rotated by provided angle.
+     * @param xPos The x-position to draw the image.
+     * @param yPos The y-position to draw the image.
+     * @param imageName The name of the image to draw from the imageMap.
+     * @param angle The angle of rotation.
+     * @returns void
+     */
+    drawImageRotated(xPos, yPos, imageName, angle) {
+        const image = this.imageMap[imageName];
+        const x = xPos + image.imgWidth / 2;
+        const y = yPos + image.imgHeight / 2
+
+        this.ctx.save();
+        this.ctx.translate(x, y);
+        this.ctx.rotate(angle * this.radianConversion);
+
+        this.ctx.drawImage(this.imageMap[imageName].img, xPos - x, yPos - y);
+        this.ctx.restore();
+    }
 
     /**
      * @desc Draw a clipped image from the renderer's imageMap.
@@ -97,6 +118,35 @@ class PixeERenderer {
             clipPosX, clipPosY, image.clipWidth, image.clipHeight,
             xPos, yPos, image.clipWidth, image.clipHeight
         );
+    }
+
+    /**
+     * @desc Draw a clipped image from the renderer's imageMap, rotated by provided angle.
+     * @param xPos The x-position to draw the image.
+     * @param yPos The y-position to draw the image.
+     * @param imageName The name of the image to draw from the imageMap.
+     * @param clipX The clip's x-position within the image.
+     * @param clipY The clip's y-position within the image.
+     * @param angle The angle of rotation.
+     * @returns void
+     */
+    drawImageClipRotated(xPos, yPos, imageName, clipX, clipY, angle) {
+        const image = this.imageMap[imageName];
+        const x = xPos + image.clipWidth / 2;
+        const y = yPos + image.clipHeight / 2
+        const clipPosX = clipX * image.clipWidth;
+        const clipPosY = clipY * image.clipHeight;
+
+        this.ctx.save();
+        this.ctx.translate(x, y);
+        this.ctx.rotate(angle * this.radianConversion);
+
+        this.ctx.drawImage(image.img,
+            clipPosX, clipPosY, image.clipWidth, image.clipHeight,
+            xPos - x, yPos - y, image.clipWidth, image.clipHeight
+        );
+
+        this.ctx.restore();
     }
 
     /**

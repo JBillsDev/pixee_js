@@ -1,5 +1,6 @@
 import PixeE from "./pixee/pixee.js";
 let count = 0;
+let angle = 0;
 
 window.onload = () => {
     const p = new PixeE();
@@ -15,6 +16,7 @@ window.onload = () => {
     renderer.loadImageToMap("pumpkin_dude", 8, 1);
 
     setInterval(() => {
+        angle += 2;
         count++;
         if (count > 7) {
             count = 0;
@@ -22,5 +24,6 @@ window.onload = () => {
 
         renderer.clearScreen();
         renderer.drawImageClip(0, 0, "pumpkin_dude", count, 0);
-    }, 100)
+        renderer.drawImageClipRotated(200, 50, "pumpkin_dude", count, 0, angle);
+    }, 50)
 };
