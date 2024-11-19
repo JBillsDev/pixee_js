@@ -40,6 +40,25 @@ class PixeERenderer {
         this.ctx.fillStyle = this.clearColor;
         this.ctx.fillRect(0, 0, this.viewportWidth, this.viewportHeight);
     }
+
+    /* @desc Draws a rectangle at (x, y) of (width, height) dimensions.
+     * @param (number) X position of rectangle.
+     * @param (number) Y position of rectangle.
+     * @param (number) Width of rectangle.
+     * @param (number) Height of rectangle.
+     * @ returns (void)
+     */
+    drawRect(xPos, yPos, width, height) {
+        this.ctx.fillRect(xPos, yPos, width, height);
+    }
+
+    /* @desc Set the color to be used by subsequent render calls.
+     * @param (color) A string value containing a color.
+     * @returns (void)
+     */
+    setRenderColor(color) {
+        this.ctx.fillStyle = color;
+    }
 }
 
 export default PixeERenderer;
