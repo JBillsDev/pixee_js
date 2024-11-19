@@ -112,6 +112,15 @@ class PixeERenderer {
     }
 
     /**
+     * @desc Free named image from imageMap.
+     * @param imageName Name of the image to be removed.
+     * @returns void
+     */
+    freeImageFromMap(imageName) {
+        delete this.imageMap[imageName];
+    }
+
+    /**
      * @desc Loads an image into a stored map of images.
      * @param imageName The name of the image, without path or extension.
      * @param relativeImagePath The path, from the rootImagePath, to the image.
