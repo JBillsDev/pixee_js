@@ -9,7 +9,4 @@ window.onload = () => {
 
     const renderer = p.getRenderer();
     renderer.clearScreen();
-
-    renderer.setRenderColor('#f00');
-    renderer.drawRect(0, 0, 100, 100);
 };

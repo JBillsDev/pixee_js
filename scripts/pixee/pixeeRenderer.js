@@ -52,12 +52,28 @@ class PixeERenderer {
         this.ctx.fillRect(xPos, yPos, width, height);
     }
 
-    /* @desc Set the color to be used by subsequent render calls.
+    /* @desc Set the color to be used by subsequent draw calls.
+     * The color value should be a CSS-allowed color value, i.e.:
+     * 'rgb(255, 55, 0)', '#eee', 'hsl(50, 80%, 30%)', 'aqua'.
      * @param (color) A string value containing a color.
      * @returns (void)
      */
     setRenderColor(color) {
         this.ctx.fillStyle = color;
+    }
+
+    /* @desc Sets the color and alpha draw color to be used by subsequent draw calls.
+     * The color values used can be integers (0 - 255) or percentages (0 - 100%).
+     * The alpha value can be a float (0 - 1.0) or percentage (0 - 100%).
+     * @param (number) The red value.
+     * @param (number) The green value.
+     * @param (number) The blue value.
+     * @param (number) The alpha value.
+     * @returns (void)
+     */
+    setRenderColorRgba(red, green, blue, alpha = 1.0) {
+        console.log(`${red} ${green} ${blue}`);
+        this.ctx.fillStyle = `rgb(${red} ${green} ${blue} / ${alpha})`;
     }
 }
 
