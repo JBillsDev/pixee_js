@@ -1,4 +1,5 @@
 import PixeEClock from "./pixeeClock.js";
+import PixeEInput from "./pixeeInput.js";
 import { PixeELogLevel, PixeELogger } from "./pixeeLogger.js";
 import PixeERenderer from "./pixeeRenderer.js";
 
@@ -18,7 +19,7 @@ class PixeE {
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.1.8";
+        this.version = "a0.2.0";
         this.fullName = `${this.name} - ${this.version}`;
 
         this.clock = new PixeEClock();
@@ -27,6 +28,16 @@ class PixeE {
         // Reference to the primary logger.
         this.logger = new PixeELogger(this.clock, debug, timestamp, singleLine, defaultLogLevel);
         this.logger.info(this.name, this.fullName);
+
+        this.input = new PixeEInput();
+    }
+
+    /**
+     * @desc Returns a reference to the PixeEInput instance.
+     * @returns PixeEInput
+     */
+    getInput() {
+        return this.input;
     }
 
     /**
