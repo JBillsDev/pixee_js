@@ -18,7 +18,7 @@ class PixeE {
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.1.4";
+        this.version = "a0.1.5";
         this.fullName = `${this.name} - ${this.version}`;
 
         this.clock = new PixeEClock();
