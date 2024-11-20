@@ -32,6 +32,14 @@ function update(deltaTime, input) {
     if (input.getKeyDown("ArrowDown")) {
         y += speed;
     }
+
+    if (input.getKeyJustReleased("Escape")) {
+        console.log("Just Released");
+    }
+
+    if (input.getKeyJustPressed("Escape")) {
+        console.log("Just Pressed");
+    }
 }
 
 window.onload = () => {

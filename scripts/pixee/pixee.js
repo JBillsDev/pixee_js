@@ -19,7 +19,7 @@ class PixeE {
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.2.1";
+        this.version = "a0.2.2";
         this.fullName = `${this.name} - ${this.version}`;
         this.running = true;
 
@@ -49,6 +49,7 @@ class PixeE {
         // Request the next animation frame, which should be in-sync with monitor refresh rate.
         requestAnimationFrame(this.gameLoop.bind(this));
 
+        this.input.updateKeys(this.clock.deltaTime);
         this.frameUpdateCallback(this.clock.deltaTime, this.input);
 
         // Check if it is time to render the next drawn frame.
