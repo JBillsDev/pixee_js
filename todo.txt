@@ -1,4 +1,13 @@
 Add input.
+    keyPressed
+    keyReleased
+    mouseMotion
+    mouseButtonDown
+    mouseButtonPressed
+    mouseButtonReleased
+    Add boolean isFocused when canvas has been clicked on.
+        This will be used to call 'e.preventDefault()' for keyDown and keyUp events when true.
+
 Add music.
 Add sound.
 Add collision.

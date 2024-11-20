@@ -14,6 +14,30 @@ const PixeETimeValuesInMillis = Object.freeze({
 class PixeEClock {
     constructor() {
         this.appStartTime = Date.now();
+
+        // Fps related variables.
+        this.currentFps = 0;
+        this.desiredFPS = 30;
+        this.fpsInterval = PixeETimeValuesInMillis.SECOND / this.desiredFPS;
+        this.frameCount = 0;
+
+        // Frame time variables.
+        this.deltaTime = 0;
+        this.elapsedTime = 0;
+        this.lastFrameTime = this.appStartTime;
+        this.currentTime = this.appStartTime;
+    }
+
+    /**
+     * @desc Checks and updates the time between when this is called and the last recorded frame time.
+     * @returns void
+     */
+    checkFrameTime() {
+        // Get the milliseconds (shown as fraction of a second) since last frame.
+        this.deltaTime = (Date.now() - this.currentTime) / PixeETimeValuesInMillis.SECOND;
+
+        this.currentTime = Date.now();
+        this.elapsedTime = this.currentTime - this.lastFrameTime;
     }
 
     /**
@@ -81,6 +105,24 @@ class PixeEClock {
         }
 
         return timestamp;
+    }
+
+    /**
+     * @desc Performs Fps calculation, and returns true when it is time to call the next render frame.
+     * @returns {boolean}
+     */
+    isTimeToRender() {
+        if (this.elapsedTime > this.fpsInterval) {
+            this.lastFrameTime = this.currentTime - (this.elapsedTime % this.fpsInterval);
+
+            const timeSinceStart = this.currentTime - this.appStartTime;
+            this.currentFps = Math.round(
+                PixeETimeValuesInMillis.SECOND / (timeSinceStart / ++this.frameCount
+                ) * 100) / 100;
+            return true;
+        }
+
+        return false;
     }
 }
 

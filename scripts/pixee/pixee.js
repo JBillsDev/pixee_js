@@ -19,8 +19,13 @@ class PixeE {
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.2.0";
+        this.version = "a0.2.1";
         this.fullName = `${this.name} - ${this.version}`;
+        this.running = true;
+
+        // These are the callback functions that should be overridden to render and update game.
+        this.frameRenderCallback = null;
+        this.frameUpdateCallback = null;
 
         this.clock = new PixeEClock();
         this.renderer = null;
@@ -30,6 +35,27 @@ class PixeE {
         this.logger.info(this.name, this.fullName);
 
         this.input = new PixeEInput();
+    }
+
+    /**
+     * @desc This is the game loop that repeats until 'running' is set to false.
+     * @returns void
+     */
+    gameLoop() {
+        if (this.running === false) {
+            return;
+        }
+
+        // Request the next animation frame, which should be in-sync with monitor refresh rate.
+        requestAnimationFrame(this.gameLoop.bind(this));
+
+        this.frameUpdateCallback(this.clock.deltaTime, this.input);
+
+        // Check if it is time to render the next drawn frame.
+        this.clock.checkFrameTime();
+        if (this.clock.isTimeToRender()) {
+            this.frameRenderCallback(this.renderer);
+        }
     }
 
     /**
@@ -68,6 +94,16 @@ class PixeE {
      */
     initRenderer(canvasID, desiredWidth, desiredHeight, clearColor) {
         this.renderer = new PixeERenderer(canvasID, desiredWidth, desiredHeight, clearColor, this.logger);
+    }
+
+    /**
+     * @desc Used to set the user-defined callbacks for render and update.
+     * @param render Callback to the desired render function, where frames should be drawn.
+     * @param update Callback to the desired update function, where logic should be handled.
+     */
+    setCallbacks(render, update) {
+        this.frameRenderCallback = render;
+        this.frameUpdateCallback = update;
     }
 }
 
