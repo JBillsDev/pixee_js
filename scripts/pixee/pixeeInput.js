@@ -26,12 +26,41 @@ export class PixeEInput {
         this.mouseX = 0;
         this.mouseY = 0;
 
+        // Store the bound event handler for adding and removing the callback.
+        this.boundDisableContextMenuEventHandler = this.disableContextMenuCallback.bind(this);
+        this.disableContextMenu(true);
+
         document.addEventListener("keydown", this.keyDownCallback.bind(this));
         document.addEventListener("keyup", this.keyUpCallback.bind(this));
 
         document.addEventListener("mousedown", this.mouseDownCallback.bind(this));
         document.addEventListener("mousemove", this.mouseMoveCallback.bind(this));
         document.addEventListener("mouseup", this.mouseUpCallback.bind(this));
+    }
+
+    /**
+     * @desc Used to enable or disable the capture of the right-click menu.
+     * @returns void
+     */
+    disableContextMenu(disable) {
+        if (disable) {
+            document.addEventListener("contextmenu", this.boundDisableContextMenuEventHandler);
+        } else {
+            try {
+                document.removeEventListener("contextmenu", this.boundDisableContextMenuEventHandler);
+            } catch (error) {
+
+            }
+        }
+    }
+
+    /**
+     * @desc Used to prevent or enable the right-click menu from appearing on the webpage.
+     * @param e The event object.
+     * @returns void
+     */
+    disableContextMenuCallback(e) {
+        e.preventDefault();
     }
 
     /**
