@@ -1,5 +1,5 @@
 import PixeEClock from "./pixeeClock.js";
-import PixeEInput from "./pixeeInput.js";
+import { PixeEInput } from "./pixeeInput.js";
 import { PixeELogLevel, PixeELogger } from "./pixeeLogger.js";
 import PixeERenderer from "./pixeeRenderer.js";
 
@@ -21,7 +21,7 @@ class PixeE {
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.2.3";
+        this.version = "a0.2.4";
         this.fullName = `${this.name} - ${this.version}`;
         this.running = true;
 

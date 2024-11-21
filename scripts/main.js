@@ -1,4 +1,6 @@
 import PixeE from "./pixee/pixee.js";
+import { PixeEInputMouseButton } from "./pixee/pixeeInput.js";
+
 let count = 0;
 let angle = 0;
 let x = 0, y = 0;
@@ -15,27 +17,40 @@ function render(renderer) {
 }
 
 function update(deltaTime, input) {
-    angle += 2;
+    // angle += 2;
     count += deltaTime * animationFps;
 
     if (count >= 8) {
         count = 0;
     }
 
-    if (input.getKeyDown("ArrowLeft")) {
+    if (input.getInputDown("ArrowLeft")) {
         x -= speed;
     }
-    if (input.getKeyDown("ArrowRight")) {
+    if (input.getInputDown("ArrowRight")) {
         x += speed;
     }
-    if (input.getKeyDown("ArrowUp")) {
+    if (input.getInputDown("ArrowUp")) {
         y -= speed;
     }
-    if (input.getKeyDown("ArrowDown")) {
+    if (input.getInputDown("ArrowDown")) {
         y += speed;
     }
 
     mousePos = input.getMousePos();
+    if (input.getInputJustPressed(PixeEInputMouseButton.LEFT)) {
+        angle += 15;
+    }
+    if (input.getInputJustPressed(PixeEInputMouseButton.RIGHT)) {
+        angle -= 15;
+    }
+    if (input.getInputJustPressed(PixeEInputMouseButton.MIDDLE)) {
+        angle += 180;
+    }
+
+    if (input.getInputDown(PixeEInputMouseButton.LEFT)) {
+        angle += 1.5;
+    }
 }
 
 window.onload = () => {

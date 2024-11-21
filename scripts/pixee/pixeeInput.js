@@ -1,5 +1,13 @@
 import { clamp } from "./pixeeUtility.js";
 
+// Object containing string values for mouse button input.
+export const PixeEInputMouseButton = Object.freeze({
+    LEFT: "MOUSE_LEFT",
+    MIDDLE: "MOUSE_MIDDLE",
+    RIGHT: "MOUSE_RIGHT"
+});
+
+// Class used to represent the various aspects of an input key in use.
 class PixeEInputKey {
     constructor() {
         this.isDown = true;
@@ -9,10 +17,10 @@ class PixeEInputKey {
 }
 
 // Input class that gathers and relays input.
-class PixeEInput {
+export class PixeEInput {
     constructor(canvasID) {
         this.canvasElement = document.getElementById(canvasID);
-        this.justTriggeredLifetime = 0.1;
+        this.justTriggeredLifetime = 0.025;
 
         this.inputMap = {}
         this.mouseX = 0;
@@ -20,7 +28,30 @@ class PixeEInput {
 
         document.addEventListener("keydown", this.keyDownCallback.bind(this));
         document.addEventListener("keyup", this.keyUpCallback.bind(this));
+
+        document.addEventListener("mousedown", this.mouseDownCallback.bind(this));
         document.addEventListener("mousemove", this.mouseMoveCallback.bind(this));
+        document.addEventListener("mouseup", this.mouseUpCallback.bind(this));
+    }
+
+    /**
+     * @desc Updates any keyboard key or mouse button passed in.
+     * @param value The key or button that needs to be updated.
+     * @param down 'true' if the key or button is currently pressed.
+     * @returns void
+     */
+    updateInputValueInMap(value, down) {
+        if (!(value in this.inputMap)) {
+            if (down) {
+                this.inputMap[value] = new PixeEInputKey();
+            }
+
+            return;
+        }
+
+        this.inputMap[value].isDown = down;
+        this.inputMap[value].justReleased = true;
+        this.inputMap[value].lifeTime = 0.0;
     }
 
     /**
@@ -28,7 +59,7 @@ class PixeEInput {
      * @param key The requested keyboard key.
      * @returns boolean
      */
-    getKeyDown(key) {
+    getInputDown(key) {
         return this.inputMap[key]?.isDown;
     }
 
@@ -37,7 +68,7 @@ class PixeEInput {
      * @param key The requested keyboard key.
      * @returns boolean
      */
-    getKeyJustPressed(key) {
+    getInputJustPressed(key) {
         if (key in this.inputMap) {
             if (this.inputMap[key].justPressed) {
                 this.inputMap[key].justPressed = false;
@@ -54,7 +85,7 @@ class PixeEInput {
      * @param key The requested keyboard key.
      * @returns boolean
      */
-    getKeyJustReleased(key) {
+    getInputJustReleased(key) {
         if (key in this.inputMap) {
             if (this.inputMap[key].justReleased) {
                 delete this.inputMap[key];
@@ -79,20 +110,53 @@ class PixeEInput {
      * @returns void
      */
     keyDownCallback(e) {
-        if (!(e.key in this.inputMap)) {
-            this.inputMap[e.key] = new PixeEInputKey();
-        }
+        this.updateInputValueInMap(e.key, true);
     }
 
     /**
      * @desc The callback used for keyUp events.
      * @param e The event object.
+     * @returns void
      */
     keyUpCallback(e) {
-        if (e.key in this.inputMap) {
-            this.inputMap[e.key].isDown = false;
-            this.inputMap[e.key].justReleased = true;
-            this.inputMap[e.key].lifeTime = 0.0;
+        this.updateInputValueInMap(e.key, false);
+    }
+
+    /**
+     * @desc The callback for mouseButtonDown events.
+     * @param e The event object.
+     * @returns void
+     */
+    mouseDownCallback(e) {
+        switch (e.button) {
+            case 0:
+                this.updateInputValueInMap(PixeEInputMouseButton.LEFT, true);
+                break;
+            case 1:
+                this.updateInputValueInMap(PixeEInputMouseButton.MIDDLE, true);
+                break;
+            case 2:
+                this.updateInputValueInMap(PixeEInputMouseButton.RIGHT, true);
+                break;
+        }
+    }
+
+    /**
+     * @desc The callback for mouseButtonUp events.
+     * @param e The event object.
+     * @returns void
+     */
+    mouseUpCallback(e) {
+        switch (e.button) {
+            case 0:
+                this.updateInputValueInMap(PixeEInputMouseButton.LEFT, false);
+                break;
+            case 1:
+                this.updateInputValueInMap(PixeEInputMouseButton.MIDDLE, false);
+                break;
+            case 2:
+                this.updateInputValueInMap(PixeEInputMouseButton.RIGHT, false);
+                break;
         }
     }
 
@@ -105,8 +169,6 @@ class PixeEInput {
         const rect = this.canvasElement.getBoundingClientRect();
         this.mouseX = clamp((e.clientX - rect.left), 0, rect.width);
         this.mouseY = clamp((e.clientY - rect.top), 0, rect.height);
-
-        console.log(this.mouseX, this.mouseY);
     }
 
     /**
@@ -131,5 +193,3 @@ class PixeEInput {
         }
     }
 }
-
-export default PixeEInput;

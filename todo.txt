@@ -1,7 +1,4 @@
 PixeEInput
-    mouseButtonDown
-    mouseButtonPressed
-    mouseButtonReleased
     Add boolean isFocused when canvas has been clicked on.
         This will be used to call 'e.preventDefault()' for keyDown and keyUp events when true.
 
