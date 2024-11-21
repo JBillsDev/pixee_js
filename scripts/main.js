@@ -1,6 +1,8 @@
 import PixeE from "./pixee/pixee.js";
 import { PixeEInputMouseButton } from "./pixee/pixeeInput.js";
 
+let p = null;
+
 let count = 0;
 let angle = 0;
 let x = 0, y = 0;
@@ -17,6 +19,9 @@ function render(renderer) {
 }
 
 function update(deltaTime, input) {
+    let velX = 0;
+    let velY = 0;
+
     // angle += 2;
     count += deltaTime * animationFps;
 
@@ -25,16 +30,28 @@ function update(deltaTime, input) {
     }
 
     if (input.getInputDown("ArrowLeft")) {
-        x -= speed;
+        velX -= speed;
     }
     if (input.getInputDown("ArrowRight")) {
-        x += speed;
+        velX += speed;
     }
     if (input.getInputDown("ArrowUp")) {
-        y -= speed;
+        velY -= speed;
     }
     if (input.getInputDown("ArrowDown")) {
-        y += speed;
+        velY += speed;
+    }
+
+    x += velX;
+    if (velX) {
+        const a = p.getAudio();
+        a.playSound("step");
+    }
+
+    y += velY;
+    if (velY) {
+        const a = p.getAudio();
+        a.playSound("stepHigh");
     }
 
     mousePos = input.getMousePos();
@@ -54,7 +71,7 @@ function update(deltaTime, input) {
 }
 
 window.onload = () => {
-    const p = new PixeE('game-canvas');
+    p = new PixeE('game-canvas');
     p.initRenderer(640, 360, '#000');
 
     const logger = p.getLogger();
@@ -64,6 +81,8 @@ window.onload = () => {
     renderer.setRootImagePath("/res/img/");
     renderer.loadImageToMap("pumpkin_dude", 8, 1);
 
+    p.getAudio().loadSoundFile("step", "./res/sfx/");
+    p.getAudio().loadSoundFile("stepHigh", "./res/sfx/");
     p.setCallbacks(render, update);
     p.gameLoop()
 };

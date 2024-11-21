@@ -1,4 +1,8 @@
 
-Add music.
-Add sound.
+PixeEAudio
+    Add freeing of loaded sound files.
+    Add playback control.
+    Add volume control.
+    Add music.
+
 Add collision.
