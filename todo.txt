@@ -1,7 +1,4 @@
-Add input.
-    keyPressed
-    keyReleased
-    mouseMotion
+PixeEInput
     mouseButtonDown
     mouseButtonPressed
     mouseButtonReleased

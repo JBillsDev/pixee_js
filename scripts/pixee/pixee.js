@@ -6,6 +6,7 @@ import PixeERenderer from "./pixeeRenderer.js";
 // @desc The base context for the PixeE engine.
 class PixeE {
     /**
+     * @param canvasID The html ID of the canvas.
      * @param debug Whether or not logging is desired.
      * @param timestamp Whether or not timestamps are desired with logging.
      * @param singleLine Whether or not logging should be on a single line, or split for readability.
@@ -13,15 +14,18 @@ class PixeE {
      * @returns void
      */
     constructor(
+        canvasID,
         debug = true,
         timestamp = true,
         singleLine = true,
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.2.2";
+        this.version = "a0.2.3";
         this.fullName = `${this.name} - ${this.version}`;
         this.running = true;
+
+        this.canvasID = canvasID;
 
         // These are the callback functions that should be overridden to render and update game.
         this.frameRenderCallback = null;
@@ -34,7 +38,7 @@ class PixeE {
         this.logger = new PixeELogger(this.clock, debug, timestamp, singleLine, defaultLogLevel);
         this.logger.info(this.name, this.fullName);
 
-        this.input = new PixeEInput();
+        this.input = new PixeEInput(this.canvasID);
     }
 
     /**
@@ -87,14 +91,13 @@ class PixeE {
 
     /**
      * @desc Initializes the renderer, which contains the Context2D.
-     * @param canvasID The html id of the canvas element.
      * @param desiredWidth The desired width of the canvas.
      * @param desiredHeight The desired height of the canvas.
      * @param clearColor The clear color to be used when clearing the screen.
      * @returns void
      */
-    initRenderer(canvasID, desiredWidth, desiredHeight, clearColor) {
-        this.renderer = new PixeERenderer(canvasID, desiredWidth, desiredHeight, clearColor, this.logger);
+    initRenderer(desiredWidth, desiredHeight, clearColor) {
+        this.renderer = new PixeERenderer(this.canvasID, desiredWidth, desiredHeight, clearColor, this.logger);
     }
 
     /**

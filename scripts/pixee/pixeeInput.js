@@ -1,3 +1,5 @@
+import { clamp } from "./pixeeUtility.js";
+
 class PixeEInputKey {
     constructor() {
         this.isDown = true;
@@ -8,12 +10,17 @@ class PixeEInputKey {
 
 // Input class that gathers and relays input.
 class PixeEInput {
-    constructor() {
+    constructor(canvasID) {
+        this.canvasElement = document.getElementById(canvasID);
         this.justTriggeredLifetime = 0.1;
+
         this.inputMap = {}
+        this.mouseX = 0;
+        this.mouseY = 0;
 
         document.addEventListener("keydown", this.keyDownCallback.bind(this));
-        document.addEventListener("keyup", this.keyUpCallback.bind(this))
+        document.addEventListener("keyup", this.keyUpCallback.bind(this));
+        document.addEventListener("mousemove", this.mouseMoveCallback.bind(this));
     }
 
     /**
@@ -59,8 +66,17 @@ class PixeEInput {
     }
 
     /**
+     * @desc Returns an array containing [mouseX, mouseY].
+     * @returns {number[]}
+     */
+    getMousePos() {
+        return [this.mouseX, this.mouseY];
+    }
+
+    /**
      * @desc The callback used for keyDown events.
      * @param e The event object.
+     * @returns void
      */
     keyDownCallback(e) {
         if (!(e.key in this.inputMap)) {
@@ -80,6 +96,24 @@ class PixeEInput {
         }
     }
 
+    /**
+     * @desc The callback used for mouseMove events.
+     * @param e The event object.
+     * @returns void
+     */
+    mouseMoveCallback(e) {
+        const rect = this.canvasElement.getBoundingClientRect();
+        this.mouseX = clamp((e.clientX - rect.left), 0, rect.width);
+        this.mouseY = clamp((e.clientY - rect.top), 0, rect.height);
+
+        console.log(this.mouseX, this.mouseY);
+    }
+
+    /**
+     * @desc Updates the state of currently recorded keyboard key presses.
+     * @param deltaTime The time (in fractions of a second) that have elapsed since the last update.
+     * @returns void
+     */
     updateKeys(deltaTime) {
         for (const key in this.inputMap) {
             const currentKey = this.inputMap[key];
