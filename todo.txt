@@ -1,4 +1,4 @@
-Add images.
-Add input.
+
 Add music.
 Add sound.
+Add collision.
