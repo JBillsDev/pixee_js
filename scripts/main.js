@@ -1,6 +1,9 @@
 import PixeE from "./pixee/pixee.js";
 import { PixeEInputMouseButton } from "./pixee/pixeeInput.js";
 
+let p = null;
+let a = null;
+
 let count = 0;
 let angle = 0;
 let x = 0, y = 0;
@@ -17,6 +20,9 @@ function render(renderer) {
 }
 
 function update(deltaTime, input) {
+    let velX = 0;
+    let velY = 0;
+
     // angle += 2;
     count += deltaTime * animationFps;
 
@@ -25,16 +31,26 @@ function update(deltaTime, input) {
     }
 
     if (input.getInputDown("ArrowLeft")) {
-        x -= speed;
+        velX -= speed;
     }
     if (input.getInputDown("ArrowRight")) {
-        x += speed;
+        velX += speed;
     }
     if (input.getInputDown("ArrowUp")) {
-        y -= speed;
+        velY -= speed;
     }
     if (input.getInputDown("ArrowDown")) {
-        y += speed;
+        velY += speed;
+    }
+
+    x += velX;
+    if (velX) {
+        a.playSound("step");
+    }
+
+    y += velY;
+    if (velY) {
+        a.playSound("stepHigh");
     }
 
     mousePos = input.getMousePos();
@@ -51,10 +67,14 @@ function update(deltaTime, input) {
     if (input.getInputDown(PixeEInputMouseButton.LEFT)) {
         angle += 1.5;
     }
+
+    if (input.getInputJustPressed(' ')) {
+        a.toggleMusic(true);
+    }
 }
 
 window.onload = () => {
-    const p = new PixeE('game-canvas');
+    p = new PixeE('game-canvas');
     p.initRenderer(640, 360, '#000');
 
     const logger = p.getLogger();
@@ -64,6 +84,10 @@ window.onload = () => {
     renderer.setRootImagePath("/res/img/");
     renderer.loadImageToMap("pumpkin_dude", 8, 1);
 
+    a = p.getAudio();
+    a.loadMusicFile("beach_vibes", "./res/music/", true);
+    a.loadSoundFile("step", "./res/sfx/");
+    a.loadSoundFile("stepHigh", "./res/sfx/");
     p.setCallbacks(render, update);
     p.gameLoop()
 };

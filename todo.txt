@@ -1,4 +1,2 @@
 
-Add music.
-Add sound.
 Add collision.

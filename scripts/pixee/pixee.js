@@ -1,3 +1,4 @@
+import PixeeAudio from "./pixeeAudio.js";
 import PixeEClock from "./pixeeClock.js";
 import { PixeEInput } from "./pixeeInput.js";
 import { PixeELogLevel, PixeELogger } from "./pixeeLogger.js";
@@ -21,7 +22,7 @@ class PixeE {
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.2.5";
+        this.version = "a0.3.3";
         this.fullName = `${this.name} - ${this.version}`;
         this.running = true;
 
@@ -39,6 +40,7 @@ class PixeE {
         this.logger.info(this.name, this.fullName);
 
         this.input = new PixeEInput(this.canvasID);
+        this.audio = new PixeeAudio();
     }
 
     /**
@@ -61,6 +63,14 @@ class PixeE {
         if (this.clock.isTimeToRender()) {
             this.frameRenderCallback(this.renderer);
         }
+    }
+
+    /**
+     * @desc Returns a reference to the PixeEAudio instance.
+     * @returns PixeeAudio
+     */
+    getAudio() {
+        return this.audio;
     }
 
     /**
