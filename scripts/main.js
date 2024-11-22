@@ -67,6 +67,10 @@ function update(deltaTime, input) {
     if (input.getInputDown(PixeEInputMouseButton.LEFT)) {
         angle += 1.5;
     }
+
+    if (input.getInputJustPressed(' ')) {
+        a.toggleMusic(true);
+    }
 }
 
 window.onload = () => {
@@ -81,6 +85,7 @@ window.onload = () => {
     renderer.loadImageToMap("pumpkin_dude", 8, 1);
 
     a = p.getAudio();
+    a.loadMusicFile("beach_vibes", "./res/music/", true);
     a.loadSoundFile("step", "./res/sfx/");
     a.loadSoundFile("stepHigh", "./res/sfx/");
     p.setCallbacks(render, update);

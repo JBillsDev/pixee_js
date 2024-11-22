@@ -1,7 +1,6 @@
 
 PixeEAudio
     Add playback control.
-    Add volume control.
     Add music.
 
 Add collision.
