@@ -22,7 +22,7 @@ class PixeE {
         defaultLogLevel = PixeELogLevel.INFO
     ) {
         this.name = "PixeE";
-        this.version = "a0.3.2";
+        this.version = "a0.3.3";
         this.fullName = `${this.name} - ${this.version}`;
         this.running = true;
 

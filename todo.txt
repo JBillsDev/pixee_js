@@ -1,6 +1,2 @@
 
-PixeEAudio
-    Add playback control.
-    Add music.
-
 Add collision.
