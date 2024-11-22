@@ -1,6 +1,5 @@
 
 PixeEAudio
-    Add freeing of loaded sound files.
     Add playback control.
     Add volume control.
     Add music.

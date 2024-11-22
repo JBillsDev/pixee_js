@@ -2,6 +2,7 @@ import PixeE from "./pixee/pixee.js";
 import { PixeEInputMouseButton } from "./pixee/pixeeInput.js";
 
 let p = null;
+let a = null;
 
 let count = 0;
 let angle = 0;
@@ -44,13 +45,11 @@ function update(deltaTime, input) {
 
     x += velX;
     if (velX) {
-        const a = p.getAudio();
         a.playSound("step");
     }
 
     y += velY;
     if (velY) {
-        const a = p.getAudio();
         a.playSound("stepHigh");
     }
 
@@ -81,8 +80,9 @@ window.onload = () => {
     renderer.setRootImagePath("/res/img/");
     renderer.loadImageToMap("pumpkin_dude", 8, 1);
 
-    p.getAudio().loadSoundFile("step", "./res/sfx/");
-    p.getAudio().loadSoundFile("stepHigh", "./res/sfx/");
+    a = p.getAudio();
+    a.loadSoundFile("step", "./res/sfx/");
+    a.loadSoundFile("stepHigh", "./res/sfx/");
     p.setCallbacks(render, update);
     p.gameLoop()
 };
